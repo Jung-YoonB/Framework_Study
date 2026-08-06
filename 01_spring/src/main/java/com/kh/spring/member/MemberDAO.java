@@ -99,4 +99,57 @@ public class MemberDAO {
 		}
 	}
 	
+	public void update(MemberDTO m) {
+		String sql = "UPDATE member SET name = ?, email = ?, age = ? WHERE id = ?";
+		
+		try (Connection c = DBUtil.getDBConn()) {
+			PreparedStatement ps = c.prepareStatement(sql);
+			
+			ps.setString(1, m.getName());
+			ps.setString(2, m.getEmail());
+			ps.setInt(3, m.getAge());
+			ps.setInt(4, m.getId());
+			
+			int r = ps.executeUpdate();
+			
+			if (r>0) System.out.println("회원 수정 완료");
+			else System.out.println("회원 수정 실패");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	// 회원 정보 조회
+	// => member 테이블에서 전달 받은 회원 번호(id)에 해당하는 회우너 정보를 조회 한 결과 반환
+	public MemberDTO findById(int id) {
+		MemberDTO member = null;
+		
+		String sql = "SELECT ID, Name, Email, Age FROM member WHERE id = ?";
+		
+		try (Connection c = DBUtil.getDBConn()) {
+			PreparedStatement ps = c.prepareStatement(sql);
+			
+			ps.setInt(1, id);
+			
+			ResultSet rs = ps.executeQuery();
+			
+			
+			if(rs.next()) {
+				member = new MemberDTO(
+						rs.getInt("id"),
+						rs.getString("name"),
+						rs.getString("email"),
+						rs.getInt("age")
+						);
+			}
+
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return member;
+	}
 }

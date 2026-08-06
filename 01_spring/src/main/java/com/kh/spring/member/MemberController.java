@@ -49,7 +49,8 @@ public class MemberController {
 	 */
 	@PostMapping("/insert")
 	public String insert(@ModelAttribute MemberDTO member) {
-		return "";
+		service.insertMember(member);
+		return "redirect:/member/list";
 	}
 	
 	
@@ -57,10 +58,36 @@ public class MemberController {
 	 * 회원 삭제
 	 * URL : [GET] /member/delete/{id}
 	 */
-	@GetMapping("delete/{id}")
+	@GetMapping("/delete/{id}")
 	public String delete(@PathVariable int id) {
 		service.deleteMember(id);
 		return "redirect:/member/list";
 	}
 	
+	
+	/**
+	 * 회원 수정
+	 * URL : [POST] /member/update
+	 * 요청 파라미터 : {id, name, email, age} MemberDTO
+	 */
+	@PostMapping("/update")
+	public String update(@ModelAttribute MemberDTO member) {
+		service.updateMember(member);
+		return "redirect:/member/list";
+	}
+	
+	/**
+	 * 회원 수정 페이지 응답
+	 * [GET] /member/update/회원번호
+	 */
+	@GetMapping("/update/{id}")
+	public String updateForm(@PathVariable int id, Model m) {
+		// 회원 번호를 기준으로 회원 정보를 조회
+		MemberDTO member = service.getMember(id);
+		
+		// request 영역에 회원 정보 저장
+		m.addAttribute("member", member);
+		
+		return "/member/updateForm";
+	}
 }

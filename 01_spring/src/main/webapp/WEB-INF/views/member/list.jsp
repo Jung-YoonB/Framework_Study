@@ -11,6 +11,7 @@
 		
 		<p>
 			<a href="/insertForm.html">회원 등록</a>
+			
 		</p>
 		
 		<table border="1">
@@ -22,6 +23,7 @@
 					<th>이메일</th>
 					<th>나이</th>
 					<th>삭제</th>
+					<th>수정</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -29,7 +31,7 @@
 				<%-- 조건문을 사용하여 리스트가 비어 있는 경우 "등록 된 회원이 없습니다" 출력 --%>
 				<c:if test="${ empty memberList }">
 					<tr>
-						<td colspan="6">등록 된 회원이 없습니다</td>
+						<td colspan="7">등록 된 회원이 없습니다</td>
 					</tr>
 				</c:if>
 				
@@ -42,6 +44,7 @@
 						<td>${ m.email }</td>
 						<td>${ m.age }</td>
 						<td><a href="/member/delete/${ m.id }">삭제</a></td>
+						<td><a href="/member/update/${ m.id }">수정</a></td>
 					</tr>
 				</c:forEach>
 			</tbody>
