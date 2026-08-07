@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<!--
+	namespace : 해당 XML 파일이 어떤 Mapper 인터페이스와 연결할 지 지정
+-->
+<mapper namespace="com.kh.mybatis.model.mapper.MemberMapper">
+
+	<!--
+		id : 연결 된 인터페이스에서 실행 될 메소드명
+		resultTypr : 쿼리문의 결과를 매핑 할 타입 지정
+					 클래스(DTO/VO)인 경우 전체 클래스명으로 작성해야 함
+			* 클래스명만 지정하고자 할 경우, 설정 추가
+		
+		parameterType : 쿼리문 실행 시 사용 될 전달 데이터 타입 지정
+	-->
+	<select id="findAll" resultType="MemberDTO">
+		SELECT id, name, email, age 
+		FROM member 
+		ORDER BY id
+	</select>
+
+	<insert id="insert" parameterType="MemberDTO">
+		INSERT INTO member (id, name, email, age)
+			VALUES(seq_member_id.nextval, #{name}, #{email}, #{age})
+	</insert>
+	
+	<delete id="delete" parameterType="int">
+		DELETE FROM member
+		WHERE id = #{id}
+	</delete>
+	
+	<select id="findMember" parameterType="int" resultType="MemberDTO">
+		SELECT id, name, email, age 
+		FROM member 
+		Where id = #{id}
+	</select>
+	
+	<update id="update" parameterType="MemberDTO">
+		UPDATE member
+		SET name = #{name}, email = #{email}, age = #{age}
+		WHERE id = #{id} 
+	</update>
+</mapper>
