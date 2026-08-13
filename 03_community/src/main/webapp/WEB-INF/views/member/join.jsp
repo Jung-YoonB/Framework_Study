@@ -69,4 +69,5 @@
 	</div>
 </form>
 
+<script src="/js/member.js"></script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
