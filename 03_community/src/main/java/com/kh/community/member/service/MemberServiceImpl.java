@@ -1,7 +1,6 @@
 package com.kh.community.member.service;
 
 import java.io.IOException;
-import java.nio.channels.IllegalSelectorException;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,7 +24,7 @@ public class MemberServiceImpl implements MemberService {
 	// PasswordEncoder DI
 	private final PasswordEncoder passwordEncoder;
 	
-	@Value("file.upload-dir.profile")
+	@Value("${file.upload-dir.profile}")
 	private String profileUploadDir;
 	
 	@Override
@@ -77,7 +76,14 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public void withdraw(String memberId) {
-		// TODO Auto-generated method stub
+		MemberDTO member = mapper.selectByMemberId(memberId);
+		
+		// DB 에서 해당 사용자 정보를 삭제 (Mapper)
+		mapper.deleteMember(memberId);
+		
+		// 프로필 이미지가 있는 경우 서버에서 이미지 파일 삭제(FileUploadUtil)
+		String profile = member.getProfile();
+		if (profile != null) uploadUtil.delete(profile, profileUploadDir);
 		
 	}
 
