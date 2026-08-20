@@ -21,13 +21,7 @@ public class CommentDTO {
 	private String content;
 	private LocalDateTime createAt;
 	
-	private String CreateAtStr;
+	private String writerNickname;		// 작성자 닉네임
+	private String createAtStr;
 	
-	/*
-	COMMENT_ID  NUMBER(19)     NOT NULL,
-    BOARD_ID    NUMBER(19)     NOT NULL,
-    MEMBER_ID   VARCHAR2(50),
-    CONTENT     VARCHAR2(1000) NOT NULL,
-    CREATE_AT   DATE           DEFAULT SYSDATE NOT NULL,
-	 */
 }

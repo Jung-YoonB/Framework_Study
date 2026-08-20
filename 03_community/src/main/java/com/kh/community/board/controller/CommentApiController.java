@@ -2,6 +2,7 @@ package com.kh.community.board.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,11 +35,32 @@ public class CommentApiController {
 		// 게시글 번호, 사용자 아이디, 댓글 정보를 저장
 		try {		
 
-		CommentDTO comment = service.addComment(boardId, commentRequest.getContent(), loginMember.getMemberId());
-		return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(comment));
+			CommentDTO comment = service.addComment(boardId, commentRequest.getContent(), loginMember.getMemberId());
+			return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(comment));
 		
 		} catch (RuntimeException e) {
 			return ResponseEntity.badRequest().body(ApiResponse.fail(e.getMessage()));
+		}
+	}
+	
+	// 댓글 삭제
+	// - 요청 방식 : delete
+	// - 요정 주소 : /api/comments/댓글번호
+	// - 요청 파라미터(데이터) : X
+	@DeleteMapping("comments/{commentId}")
+	public ResponseEntity<ApiResponse<Long>> deleteComment(@PathVariable Long commentId, HttpSession session) {
+		MemberDTO loginMember= (MemberDTO)session.getAttribute(SessionConst.LOGIN_MEMBER);
+		
+		try {
+			
+			service.deleteComment(commentId, loginMember.getMemberId());
+			return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("성공적으로 삭제하였습니다", commentId));
+			
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.fail(e.getMessage()));
+		
+		} catch (SecurityException e) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiResponse.fail(e.getMessage()));
 		}
 	}
 }
