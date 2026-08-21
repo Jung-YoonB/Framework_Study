@@ -103,6 +103,9 @@ function appendComment(comment) {
 		// => dataset을 사용 하면 date-*속성으로 추가 될 것임
 		
 	commentList.appendChild(cloneComment);
+	
+	// 댓글 추가 후 댓글 개수 변경
+	updateCommentCount();
 }
 
 // 댓글 영역에 표시되는 댓글 삭제 기능
@@ -137,8 +140,17 @@ if(commentList) {
 			
 			// 화면상에서 해당 댓글 제거
 			document.querySelector(`#comment-${commentId}`).remove();
+			
+			// 댓글 삭제 시 개수 변경
+			updateCommentCount();
 		} catch (error) {
 			alert("댓글 삭제 중 오류가 발생했습니다.");
 		}
 	});
+}
+
+// 댓글 개수 카운트 함수
+function updateCommentCount() {
+	const commentCount = document.querySelectorAll(".comment-list li")?.length || 0;
+	document.querySelector(".comment-section_title").textContent = `댓글 ${commentCount}`;
 }
